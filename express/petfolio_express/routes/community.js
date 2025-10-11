@@ -174,7 +174,9 @@ router.post("/updatePost/:id", (req, res) => {
       if (!post) return res.status(404).json({ error: "Post not found" });
 
       // อัปเดตข้อความ
-      if (PostDesc) post.PostDesc = PostDesc;
+      if (PostDesc !== undefined) {
+        post.PostDesc = PostDesc;
+      }
 
       // อัปเดต pets
       if (pets) {
