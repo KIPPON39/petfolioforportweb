@@ -50,13 +50,13 @@ export default function EditPostPage() {
       .then(data => setPets(Array.isArray(data) ? data : []))
       .catch(err => console.error("Error fetching pets:", err));
   }, [token, postId]);
-
+//เปลี่ยนสัตว์ที่post
   const handlePetChange = (petId: string) => {
     setSelectedPets(prev =>
       prev.includes(petId) ? prev.filter(p => p !== petId) : [...prev, petId]
     );
   };
-
+//ซับมิทแก้ไขโพสต์
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !postId) return;
@@ -120,7 +120,7 @@ export default function EditPostPage() {
   setNewImages(prev => [...prev, ...Array.from(files)]);
 };
 
-
+//ลบรูป
   const handleRemoveImage = (idx: number, type: "existing" | "new") => {
     if (type === "existing") {
       setExistingImages(prev => prev.filter((_, i) => i !== idx));

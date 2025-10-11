@@ -57,7 +57,7 @@ export default function PetApp() {
 
 
 
-
+//เพิ่มสัตว์
     const addPet = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const userId = localStorage.getItem("userId");
@@ -128,13 +128,13 @@ export default function PetApp() {
 
     const [userId, setUserId] = useState<string | null>(null);
     const [token, setToken] = useState<string | null>(null);
-
+//ดึงข้อมูลล้อกอิน
     useEffect(() => {
         // โหลดค่าจาก localStorage หลัง mount
         setUserId(localStorage.getItem("userId"));
         setToken(localStorage.getItem("token"));
     }, []);
-
+//ดึงข้อมูลสัตว์ตามuser
     useEffect(() => {
         if (!userId || !token) return;
 
@@ -172,7 +172,7 @@ export default function PetApp() {
         setSelectedPet(pet);
         setShowDetailModal(true);
     };
-
+//เปิดป้อบอัพแก้ไข
     const openEditModal = (pet: Pet) => {
         setEditingPet(pet);
         setForm({
@@ -188,7 +188,7 @@ export default function PetApp() {
         });
         setShowEditModal(true);
     };
-
+//แก้ไขสัตว์เลี้ยง
     const editPet = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!editingPet) return;

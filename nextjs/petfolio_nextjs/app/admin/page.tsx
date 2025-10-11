@@ -80,7 +80,7 @@ export default function Admin() {
 const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   const router = useRouter();
-
+    //เข้าสู่ระบบ
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -115,7 +115,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
     ////////////////////////////////////////////////////////////////////////
     const [AllUser,SetAllUser] = useState<User[]>([]); 
-
+    //เลือกแต่ละปี
     const [selectedUserYear, SetSelectedUserYear] = useState<number>(new Date().getFullYear());
         useEffect(() => {
             const fetchAllUser = async () => {
@@ -138,7 +138,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
             const user_years = Array.from(new Set(AllUser.map(u => new Date(u.createdAt).getFullYear()))).sort();
             const user_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+            //จำนวนผู้ใช้แต่ละปี
             const user_register_data = {
               labels: user_months,
               datasets: [
@@ -159,7 +159,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 ////////////////////////////////////////////////////////////////////////////
     
     const [AllPet,SetAllPet] = useState<Pet[]>([]); 
-
+            //นับจำนวนสัตว์แต่ละปี
     const [selectedPetYear, SetSelectedPetYear] = useState<number>(new Date().getFullYear());
         useEffect(() => {
             const fetchAllPet = async () => {
@@ -182,7 +182,8 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
             const years = Array.from(new Set(AllPet.map(u => new Date(u.createdAt).getFullYear()))).sort();
             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
+            
+            //นับจำนวนสัตว์ทั้งหมด
             const pet_create_data = {
               labels: months,
               datasets: [
@@ -201,10 +202,11 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
               ]
             };
     ////////////////////////////////////////////////////
+    
             const [posts, setPosts] = useState<CommunityPost[]>([]);
 
             const [selectedPet, setSelectedPet] = useState<string | null>(null);
-
+            //ดึงpostในcommu
             useEffect(() => {
               fetch("http://localhost:3002/api/community-posts")
                 .then(res => res.json())
@@ -215,7 +217,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
 
 
-
+            //กรอตามสัตว์
             const filteredPosts = selectedPet
                 ? posts.filter(post => post.pets.some(pet => pet.name === selectedPet))
                 : posts
@@ -225,7 +227,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
 
 
-
+            //ฟังก์ชันลบโพสต์
             const handleDelete = async (postId: string) => {
               const confirmed = window.confirm("คุณแน่ใจไหมว่าต้องการลบโพสต์นี้?");
               if (!confirmed) return;
@@ -251,6 +253,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
     //
     //
     //
+            //  ฟังชันแบนผู้ใช้
             const handleToggleStatus = async (userId: string) => {
                 const user = AllUser.find(u => u.userId === userId);
                 if (!user) return;
@@ -281,7 +284,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
 
 
-
+              //  ระบบค้นหา
              const [searchTerm, setSearchTerm] = useState<string>("");
             const filteredUsers = AllUser.filter(user =>
               (user.username ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||

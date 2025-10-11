@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
     res.status(400).json({ message: err.message }); // 400 Bad Request
   }
 });
-
+// ดึงข้อมูล reminders ของผู้ใช้ตาม userId
 router.get("/user/:userId", async (req, res) => {
   const { userId } = req.params;
   try {
@@ -42,7 +42,7 @@ router.get("/user/:userId", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
+//ลบการแจ้งเตือนตามid
 router.delete("/:reminderId", async (req,res) =>{
   try{
     const {reminderId} = req.params;

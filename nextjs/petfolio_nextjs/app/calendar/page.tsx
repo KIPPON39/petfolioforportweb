@@ -81,12 +81,12 @@ export default function Calendar() {
                 : [...prev, petId]
         );
     };
-
+    //ดูรายละเอียด
     const handleViewDetails = (event) => {
         setSelectedEvent(event);
         setIsDetailModalOpen(true);
     };
-
+    
     const showReminderModal = () => {
         setIsReminderModalOpen(true);
     };
@@ -103,6 +103,7 @@ export default function Calendar() {
         setCurrentDate(prevDate => new Date(prevDate.getFullYear(), prevDate.getMonth() + 1, 1));
     };
 
+    //โชว์calendarทั้งหมด
     const renderCalendar = (year, month) => {
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
@@ -139,7 +140,7 @@ export default function Calendar() {
         return calendarDays;
 
     };
-
+    //ซับมิทฟอร์มการแจ้งเตือน
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -183,11 +184,12 @@ export default function Calendar() {
             alert("เกิดข้อผิดพลาดในการบันทึกกิจกรรม");
         }
     };
+//กดบนปฎิทิน
     const handleDayClick = (dateStr) => { //เรียกใช้เวลากดบนปฎิทิน
         setSelectedDate(`${dateStr}T00:00`);
         showReminderModal();
     };
-
+//ลบการแจ้งเตือน
     const handleDeleteReminder = async (reminderId) => {
         if (window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบการแจ้งเตือนนี้?")) {
             try {

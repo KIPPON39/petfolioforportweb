@@ -101,17 +101,17 @@ export default function Community() {
       prev.includes(petId) ? prev.filter((p) => p !== petId) : [...prev, petId]
     );
   };
-
+//เปลี่ยนไฟล์
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
   if (!e.target.files) return;
   setNewImages((prev) => [...prev, ...Array.from(e.target.files!)]);
   };
 
-
+//ลบรูป
   const handleRemoveNewImage = (idx: number) => {
     setNewImages((prev) => prev.filter((_, i) => i !== idx));
   };
-
+//บันทึกโพสต์
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !currentUser) return;
@@ -157,7 +157,7 @@ export default function Community() {
       console.error(" Error creating post:", err);
     }
   };
-
+//ลบโพสต์
   const handleDelete = async (postId: string) => {
     if (!token) return;
     if (!confirm("คุณแน่ใจว่าต้องการลบโพสต์นี้?")) return;
@@ -178,7 +178,7 @@ export default function Community() {
       console.error("Error deleting post:", err);
     }
   };
-
+//แก้ไขโพสต์
   const handleEdit = (postId: string) => {
     if (!token) {
       alert("กรุณาเข้าสู่ระบบก่อน");
