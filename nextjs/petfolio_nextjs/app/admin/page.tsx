@@ -60,18 +60,26 @@ interface Owner {
   userId: string;
   username: string;
 }
+interface Comment {
+  _id: string;
+  author: string;
+  content: string;
+  createdAt: string;
+}
+
 interface CommunityPost {
   _id: string;
   PostDesc: string;
   images: string[];
   pets: Pet[];
   likes: number;
-  comments: any[]; 
+  comments: Comment[];
   owner: Owner;
   createdAt: string;
   __v: number;
   ownerUsername: string;
 }
+
 //////////////////////////////////////////////////////////
 export default function Admin() {
 
