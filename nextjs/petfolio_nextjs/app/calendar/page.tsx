@@ -28,7 +28,7 @@ export default function Calendar() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [_selectedPets, _setSelectedPets] = useState<string[]>([]);
+  
   
   useEffect(() => {
     const fetchUserData = async () => {
@@ -84,12 +84,6 @@ export default function Calendar() {
 
     fetchUserData();
   }, []);
-
-    const _handlePetChange = (petId: string) => {
-    _setSelectedPets((prev) =>
-        prev.includes(petId) ? prev.filter((p) => p !== petId) : [...prev, petId]
-    );
-    };
 
   const handleViewDetails = (event: Reminder) => {
     setSelectedEvent(event);
