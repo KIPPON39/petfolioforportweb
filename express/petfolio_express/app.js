@@ -1,4 +1,4 @@
-// const connectDB = require("./db");
+const connectDB = require("./db");
 const port = process.env.PORT || 3002;
 
 const express = require("express");
@@ -22,7 +22,7 @@ const communityPostRoutes = require("./routes/community");
 const app = express();
 
 // Connect to MongoDB
-// connectDB();
+connectDB();
 
 // CORS ให้ Next.js (3001) เรียกได้
 app.use(
