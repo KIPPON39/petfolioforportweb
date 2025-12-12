@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Navbar from "../components/Navbar";
 
 type Pet = {
@@ -34,7 +34,7 @@ type HealthRecord = {
 const BASE_URL = "http://localhost:3002/api";
 
 const typeEmoji: Record<string, string> = {
-     dog: "🐕",
+    dog: "🐕",
     cat: "🐱",
     bird: "🐦",
     fish: "🐠",
@@ -85,7 +85,7 @@ export default function PetApp() {
     }, []);
 
     // โหลด pets
-    const loadPets = () => {
+    const loadPets = useCallback(() => {
         if (!token || !currentUser) return;
         fetch(`${BASE_URL}/pets/user/${currentUser._id}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -93,10 +93,10 @@ export default function PetApp() {
             .then((res) => res.json())
             .then((data) => setPets(Array.isArray(data) ? data : []))
             .catch((err) => console.error("fetch pets error:", err));
-    };
+    }, [token, currentUser]);
 
     // โหลด health records
-    const loadHealthRecords = () => {
+    const loadHealthRecords = useCallback(() => {
         if (!token || !currentUser) return;
         fetch(`${BASE_URL}/health/user/${currentUser._id}`, {
             headers: { Authorization: `Bearer ${token}` },
@@ -104,7 +104,7 @@ export default function PetApp() {
             .then((res) => res.json())
             .then((data) => setRecords(Array.isArray(data) ? data : []))
             .catch((err) => console.error("fetch health error:", err));
-    };
+    }, [token, currentUser]);
 
     // ลบ record
     const deleteRecord = async (id: string) => {
@@ -185,97 +185,86 @@ export default function PetApp() {
     };
 
     useEffect(() => {
-        if (token && currentUser) {
-            loadPets();
-            loadHealthRecords();
-        }
-    }, [token, currentUser]);
+        loadPets();
+        loadHealthRecords();
+    }, [loadPets, loadHealthRecords]);
 
     return (
         <div className="font-sans bg-[#f9f9f9] min-h-screen">
-  <Navbar />
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <Navbar />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Header + Add Button */}
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-3xl font-bold text-gray-800">ประวัติสุขภาพสัตว์เลี้ยง</h2>
+                    <button
+                        onClick={() => { setShowFormModal(true); setIsEdit(false); setForm({}); }}
+                        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-shadow shadow-md"
+                    >
+                        ✚ เพิ่มประวัติ
+                    </button>
+                </div>
 
-    {/* Header + Add Button */}
-    <div className="flex items-center justify-between mb-6">
-      <h2 className="text-3xl font-bold text-gray-800">ประวัติสุขภาพสัตว์เลี้ยง</h2>
-      <button
-        onClick={() => { setShowFormModal(true); setIsEdit(false); setForm({}); }}
-        className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-3 rounded-xl font-medium transition-shadow shadow-md"
-      >
-        ✚ เพิ่มประวัติ
-      </button>
-    </div>
+                {/* รายการสัตว์เลี้ยง แนวนอน */}
+                <div className="flex space-x-4 overflow-x-auto pb-4">
+                    {pets.map((p) => (
+                        <div
+                            key={p._id}
+                            onClick={() => setSelectedPet(p)}
+                            className={`min-w-[250px] flex-shrink-0 bg-white rounded-2xl p-6 shadow-md flex flex-col items-center transition-all duration-200
+                            ${selectedPet?._id === p._id ? "border-2 border-purple-500 shadow-lg" : "border border-gray-200 hover:shadow-lg"}`}
+                        >
+                            <div className="text-5xl mb-2">{typeEmoji[p.type ?? ""] ?? ""}</div>
+                            <h3 className="text-black text-xl font-bold">ชื่อสัตว์เลี้ยง: {p.name}</h3>
+                            <p className="mb-1 text-black">สายพันธุ์: {p.breed ? ` ${p.breed}` : ""}</p>
+                            <p className="text-red-500 font-semibold mb-1">⚠️ โรคประจำตัว/อาการแพ้</p>
+                            <p className="text-red-500">{p.medicalConditions || "ไม่มี"}</p>
+                        </div>
+                    ))}
+                </div>
 
-    
-    {/* รายการสัตว์เลี้ยง แนวนอน */}
-<div className="flex space-x-4 overflow-x-auto pb-4">
-  {pets.map((p) => (
-    <div
-      key={p._id}
-      onClick={() => setSelectedPet(p)}
-      className={`min-w-[250px] flex-shrink-0 bg-white rounded-2xl p-6 shadow-md flex flex-col items-center transition-all duration-200
-        ${selectedPet?._id === p._id ? "border-2 border-purple-500 shadow-lg" : "border border-gray-200 hover:shadow-lg"}`}
-    >
-      <div className="text-5xl mb-2">{typeEmoji[p.type ?? ""] ?? ""}</div>
-      <h3 className="text-black text-xl font-bold">ชื่อสัตว์เลี้ยง: {p.name}</h3>
-      <p className="mb-1 text-black">สายพันธุ์: {p.breed ? ` ${p.breed}` : ""}</p>
-      <p className="text-red-500 font-semibold mb-1">⚠️ โรคประจำตัว/อาการแพ้</p>
-      <p className="text-red-500">{p.medicalConditions || "ไม่มี"}</p>
-    </div>
-  ))}
-</div>
+                <hr className="my-4 border-t border-gray-300 mx-auto w-full" />
 
+                {/* แสดงบันทึกสุขภาพเมื่อเลือกสัตว์ */}
+                {selectedPet ? (
+                    <div>
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-2xl font-bold text-gray-800">ประวัติสุขภาพ - {selectedPet.name}</h3>
+                        </div>
 
-    
+                        {records.filter((rec) => rec.pet._id === selectedPet._id).length === 0 ? (
+                            <p className="text-gray-500">ยังไม่มีข้อมูลสุขภาพสำหรับ {selectedPet.name}</p>
+                        ) : (
+                            <ul className="space-y-4">
+                                {records
+                                    .filter((rec) => rec.pet._id === selectedPet._id)
+                                    .map((rec) => (
+                                        <li
+                                            key={rec._id}
+                                            className="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition flex flex-col"
+                                        >
+                                            <div className="mb-2">
+                                                <h4 className="text-black text-lg font-semibold">รายการ: {treatmentLabels[rec.type]}</h4>
+                                            </div>
 
+                                            <p className="text-gray-700"><strong>วันที่:</strong> {formatDate(rec.date)}</p>
+                                            <p className="text-gray-700"><strong>รายละเอียด:</strong> {rec.detail || "-"}</p>
 
-    <hr className="my-4 border-t border-gray-300 mx-auto w-full" />
-
-    {/* แสดงบันทึกสุขภาพเมื่อเลือกสัตว์ */}
-{selectedPet ? (
-  <div>
-    <div className="flex justify-between items-center mb-4">
-      <h3 className="text-2xl font-bold text-gray-800">ประวัติสุขภาพ - {selectedPet.name}</h3>
-    </div>
-
-    {records.filter((rec) => rec.pet._id === selectedPet._id).length === 0 ? (
-      <p className="text-gray-500">ยังไม่มีข้อมูลสุขภาพสำหรับ {selectedPet.name}</p>
-    ) : (
-      <ul className="space-y-4">
-        {records
-          .filter((rec) => rec.pet._id === selectedPet._id)
-          .map((rec) => (
-            <li
-              key={rec._id}
-              className="p-4 bg-gray-50 rounded-lg shadow hover:shadow-lg transition flex flex-col"
-            >
-              <div className="mb-2">
-                <h4 className=" text-black text-lg font-semibold">รายการ: {treatmentLabels[rec.type]}</h4>
-              </div>
-
-              <p className="text-gray-700"><strong>วันที่:</strong> {formatDate(rec.date)}</p>
-              <p className="text-gray-700"><strong>รายละเอียด:</strong> {rec.detail || "-"}</p>
-
-              {/* ปุ่มอยู่ขวาล่าง */}
-              <div className="mt-auto flex justify-end">
-                <button
-                  onClick={() => { setSelectedRecord(rec); setShowRecordModal(true); }}
-                  className="px-3 py-1 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition"
-                >
-                  ดูรายละเอียด
-                </button>
-              </div>
-            </li>
-          ))}
-      </ul>
-    )}
-  </div>
-
-
-    ) : (
-      <p className="text-gray-500 text-center">เลือกสัตว์เลี้ยงเพื่อดูประวัติสุขภาพ</p>
-    )}
+                                            <div className="mt-auto flex justify-end">
+                                                <button
+                                                    onClick={() => { setSelectedRecord(rec); setShowRecordModal(true); }}
+                                                    className="px-3 py-1 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition"
+                                                >
+                                                    ดูรายละเอียด
+                                                </button>
+                                            </div>
+                                        </li>
+                                    ))}
+                            </ul>
+                        )}
+                    </div>
+                ) : (
+                    <p className="text-gray-500 text-center">เลือกสัตว์เลี้ยงเพื่อดูประวัติสุขภาพ</p>
+                )}
 
     {/* Modal ดู record */}
     {showRecordModal && selectedRecord && (

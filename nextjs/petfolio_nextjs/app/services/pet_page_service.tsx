@@ -1,7 +1,22 @@
-export const addPetService = async (form: any, token: string, userId: string) => {
+// types
+export type PetType = "dog" | "cat" | "bird" | "fish" | "rabbit" | "hamster";
+
+export type AddPetForm = {
+  name: string;
+  type: PetType;
+  breed?: string;
+  medicalConditions?: string;
+  weight?: string;
+};
+
+// service
+export const addPetService = async (
+  form: AddPetForm,
+  token: string,
+  userId: string
+) => {
   const newPet = {
     ...form,
-    type: form.type,
     weight: form.weight || "",
     ownerId: userId,
   };
@@ -16,5 +31,14 @@ export const addPetService = async (form: any, token: string, userId: string) =>
   });
 
   if (!res.ok) throw new Error("Failed to add pet");
-  return await res.json(); // คืนค่าข้อมูลที่ backend ส่งกลับมา
+
+  return await res.json() as {
+    _id: string;
+    name: string;
+    type: PetType;
+    breed?: string;
+    medicalConditions?: string;
+    weight?: string;
+    ownerId: string;
+  };
 };

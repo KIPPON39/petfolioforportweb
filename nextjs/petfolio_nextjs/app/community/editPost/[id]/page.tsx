@@ -4,6 +4,18 @@ import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+
+interface Pet {
+  _id: string;
+  name: string;
+}
+
+interface PostData {
+  PostDesc: string;
+  images: string[];
+  pets?: Pet[];
+}
+
 export default function EditPostPage() {
   const router = useRouter();
   const params = useParams();
@@ -11,10 +23,10 @@ export default function EditPostPage() {
 
   const [token, setToken] = useState<string | null>(null);
   const [postDesc, setPostDesc] = useState("");
-  const [existingImages, setExistingImages] = useState<string[]>([]); // รูปเดิมจาก server
-  const [newImages, setNewImages] = useState<File[]>([]); // รูปใหม่ที่เลือก
+  const [existingImages, setExistingImages] = useState<string[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
   const [selectedPets, setSelectedPets] = useState<string[]>([]);
-  const [pets, setPets] = useState<{ _id: string; name: string }[]>([]);
+  const [pets, setPets] = useState<Pet[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
@@ -31,10 +43,10 @@ export default function EditPostPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
-      .then(data => {
+      .then((data: PostData) => {
         if (!data) return;
         setPostDesc(data.PostDesc || "");
-        setSelectedPets(data.pets?.map((p: any) => p._id) || []);
+        setSelectedPets(data.pets?.map(p => p._id) || []);
         setExistingImages(data.images || []);
         setNewImages([]);
       })
@@ -47,16 +59,16 @@ export default function EditPostPage() {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
-      .then(data => setPets(Array.isArray(data) ? data : []))
+      .then((data: Pet[]) => setPets(Array.isArray(data) ? data : []))
       .catch(err => console.error("Error fetching pets:", err));
   }, [token, postId]);
-//เปลี่ยนสัตว์ที่post
+
   const handlePetChange = (petId: string) => {
     setSelectedPets(prev =>
       prev.includes(petId) ? prev.filter(p => p !== petId) : [...prev, petId]
     );
   };
-//ซับมิทแก้ไขโพสต์
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !postId) return;
@@ -92,7 +104,7 @@ export default function EditPostPage() {
 
       if (!res.ok) {
         const data = await res.json();
-        alert(data.error || "แก้ไขโพสต์ไม่สำเร็จ");
+        alert((data as { error?: string }).error || "แก้ไขโพสต์ไม่สำเร็จ");
         return;
       }
 
@@ -100,27 +112,23 @@ export default function EditPostPage() {
       console.log("Updated post:", updatedPost);
       router.push("/community");
     } catch (err) {
-      console.error(" Error updating post:", err);
+      console.error("Error updating post:", err);
     }
   };
 
-   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const files = e.currentTarget.files;
-  if (!files) return;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.currentTarget.files;
+    if (!files) return;
 
-  // รวมไฟล์ทั้งหมด (รูปเดิม + รูปใหม่ + รูปที่เพิ่งเลือก)
-  const totalImages = existingImages.length + newImages.length + files.length;
+    const totalImages = existingImages.length + newImages.length + files.length;
+    if (totalImages > 4) {
+      alert("ใส่ภาพได้สูงสุด 4 ภาพ");
+      return;
+    }
 
-  // ถ้ามากกว่า 4 → แจ้งเตือนและไม่เพิ่ม
-  if (totalImages > 4) {
-    alert("ใส่ภาพได้สูงสุด 4 ภาพ");
-    return;
-  }
+    setNewImages(prev => [...prev, ...Array.from(files)]);
+  };
 
-  setNewImages(prev => [...prev, ...Array.from(files)]);
-};
-
-//ลบรูป
   const handleRemoveImage = (idx: number, type: "existing" | "new") => {
     if (type === "existing") {
       setExistingImages(prev => prev.filter((_, i) => i !== idx));
@@ -142,7 +150,6 @@ export default function EditPostPage() {
             rows={4}
           />
 
-          {/* อัปโหลดรูป */}
           <label className="cursor-pointer text-purple-600 hover:text-purple-500">
             ✚ อัปโหลดรูปภาพ
             <br />(สูงสุด 4 ภาพ)
@@ -155,58 +162,51 @@ export default function EditPostPage() {
             />
           </label>
 
-          {/* แสดง preview */}
           {(existingImages.length + newImages.length) > 0 && (
             <div className="grid grid-cols-2 gap-2 mt-1">
-              {existingImages.map((img, idx) => {
-                const url = `http://localhost:3002${img}`;
-                return (
-                  <div
-                    key={`existing-${idx}`}
-                    className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
-                    >
-                    <Image src={url} 
-                      alt={`รูปสัตว์เลี้ยง ${idx + 1}`} 
-                      fill
-                      className="object-cover"
-                     />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(idx, "existing")}
-                      className="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
-              {newImages.map((img, idx) => {
-                const url = URL.createObjectURL(img);
-                return (
-                  <div
-                    key={`new-${idx}`}
-                    className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
+              {existingImages.map((img, idx) => (
+                <div
+                  key={`existing-${idx}`}
+                  className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
+                >
+                  <Image
+                    src={`http://localhost:3002${img}`}
+                    alt={`รูปสัตว์เลี้ยง ${idx + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(idx, "existing")}
+                    className="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
                   >
-                    <Image
-                      src={url}                  // URL ของรูป
-                      alt={`รูปใหม่ ${idx + 1}`} // ใส่ alt
-                      fill                        // ทำให้เต็ม container
-                      className="object-cover"    // ใช้ object-cover เหมือนเดิม
-                    />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(idx, "new")}
-                      className="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
+                    ×
+                  </button>
+                </div>
+              ))}
+              {newImages.map((img, idx) => (
+                <div
+                  key={`new-${idx}`}
+                  className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
+                >
+                  <Image
+                    src={URL.createObjectURL(img)}
+                    alt={`รูปใหม่ ${idx + 1}`}
+                    fill
+                    className="object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveImage(idx, "new")}
+                    className="absolute top-1 right-1 bg-black bg-opacity-60 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
             </div>
           )}
 
-          {/* เลือกสัตว์เลี้ยง */}
           <div>
             <label className="font-semibold">เลือกสัตว์เลี้ยง:</label>
             <div className="grid grid-cols-2 gap-2 mt-1 max-h-24 overflow-y-auto">
@@ -232,7 +232,6 @@ export default function EditPostPage() {
             </div>
           </div>
 
-          {/* ปุ่มบันทึก / ยกเลิก */}
           <div className="flex gap-3 mt-4">
             <button
               type="button"

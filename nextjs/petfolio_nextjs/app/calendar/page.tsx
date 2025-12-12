@@ -28,8 +28,8 @@ export default function Calendar() {
   const [userId, setUserId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [selectedPets, setSelectedPets] = useState<string[]>([]);
-
+  const [_selectedPets, _setSelectedPets] = useState<string[]>([]);
+  
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
@@ -85,11 +85,11 @@ export default function Calendar() {
     fetchUserData();
   }, []);
 
-  const handlePetChange = (petId: string) => {
-    setSelectedPets((prev) =>
-      prev.includes(petId) ? prev.filter((p) => p !== petId) : [...prev, petId]
+    const _handlePetChange = (petId: string) => {
+    _setSelectedPets((prev) =>
+        prev.includes(petId) ? prev.filter((p) => p !== petId) : [...prev, petId]
     );
-  };
+    };
 
   const handleViewDetails = (event: Reminder) => {
     setSelectedEvent(event);

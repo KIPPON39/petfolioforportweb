@@ -84,8 +84,8 @@ interface CommunityPost {
 export default function Admin() {
 
 
-  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
-const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+//  const [isPostModalOpen, setIsPostModalOpen] = useState(false);
+//const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   const router = useRouter();
     //เข้าสู่ระบบ
@@ -144,7 +144,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
 
 
-            const user_years = Array.from(new Set(AllUser.map(u => new Date(u.createdAt).getFullYear()))).sort();
+           // const user_years = Array.from(new Set(AllUser.map(u => new Date(u.createdAt).getFullYear()))).sort();
             const user_months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
             //จำนวนผู้ใช้แต่ละปี
             const user_register_data = {
