@@ -72,8 +72,6 @@ app.use(function (err, req, res, next) {
   res.json({ error: err.message });
 });
 
-app.listen(port, () => {
-  console.log(`Express Server running at http://localhost:${port}`);
-});
+
 
 module.exports = app;
