@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [reminderCount, setReminderCount] = useState(0);
@@ -87,7 +87,7 @@ useEffect(() => {
         <div className="flex justify-between items-center h-16">
           {/* โลโก้ */}
          <div>
-        <img
+        <Image
           src="/navlogo.png"
           alt="Logo"
           className="w-32 h-auto"  // กำหนดความกว้างและรักษาสัดส่วน

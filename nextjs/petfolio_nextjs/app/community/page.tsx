@@ -2,7 +2,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "../components/Navbar";
-
+import Image from "next/image";
 import { jwtDecode } from "jwt-decode";
 
 interface TokenPayload {
@@ -227,7 +227,7 @@ export default function Community() {
                             key={idx}
                             className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
                           >
-                            <img
+                            <Image
                               src={url}
                               alt={`preview-${idx}`}
                               className="absolute top-0 left-0 w-full h-full object-cover"
@@ -307,7 +307,7 @@ export default function Community() {
                         <div className="mt-2">
                           {/* กรณีมี 1 รูป */}
                           {post.images.length === 1 && (
-                            <img
+                            <Image
                               src={`http://localhost:3002${post.images[0]}`}
                               alt="post"
                               className="w-full max-h-[400px] object-cover rounded-xl cursor-pointer"
@@ -319,7 +319,7 @@ export default function Community() {
                           {post.images.length === 2 && (
                             <div className="grid grid-cols-2 gap-2">
                               {post.images.map((img: string, idx: number) => (
-                                <img
+                                <Image
                                   key={idx}
                                   src={`http://localhost:3002${img}`}
                                   alt={`post-${idx}`}
@@ -333,7 +333,7 @@ export default function Community() {
                           {/* กรณีมี 3 รูป */}
                           {post.images.length === 3 && (
                             <div className="grid grid-rows-2 gap-2">
-                              <img
+                              <Image
                                 src={`http://localhost:3002${post.images[0]}`}
                                 alt="post-main"
                                 className="w-full h-64 object-cover rounded-xl cursor-pointer"
@@ -341,7 +341,7 @@ export default function Community() {
                               />
                               <div className="grid grid-cols-2 gap-2">
                                 {post.images.slice(1).map((img: string, idx: number) => (
-                                  <img
+                                  <Image
                                     key={idx}
                                     src={`http://localhost:3002${img}`}
                                     alt={`post-${idx}`}
@@ -358,7 +358,7 @@ export default function Community() {
                             <div className="grid grid-cols-2 gap-2">
                               {post.images.slice(0, 4).map((img: string, idx: number) => (
                                 <div key={idx} className="relative">
-                                  <img
+                                  <Image
                                     src={`http://localhost:3002${img}`}
                                     alt={`post-${idx}`}
                                     className="w-full h-48 object-cover rounded-xl cursor-pointer"
@@ -394,7 +394,7 @@ export default function Community() {
                     className="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50"
                     onClick={() => setOpenImage(null)}
                   >
-                    <img
+                    <Image
                       src={openImage}
                       alt="fullscreen"
                       className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg"
@@ -431,7 +431,7 @@ export default function Community() {
                           <div className="mt-2">
                             {/* กรณีมี 1 รูป */}
                             {post.images.length === 1 && (
-                              <img
+                              <Image
                                 src={`http://localhost:3002${post.images[0]}`}
                                 alt="post"
                                 className="w-full h-32 object-cover rounded-xl cursor-pointer"
@@ -443,7 +443,7 @@ export default function Community() {
                             {post.images.length === 2 && (
                               <div className="grid grid-cols-2 gap-2">
                                 {post.images.map((img: string, idx: number) => (
-                                  <img
+                                  <Image
                                     key={idx}
                                     src={`http://localhost:3002${img}`}
                                     alt={`post-${idx}`}
@@ -457,7 +457,7 @@ export default function Community() {
                             {/* กรณีมี 3 รูป */}
                             {post.images.length === 3 && (
                               <div className="grid grid-rows-2 gap-2">
-                                <img
+                                <Image
                                   src={`http://localhost:3002${post.images[0]}`}
                                   alt="post-main"
                                   className="w-full h-32 object-cover rounded-xl cursor-pointer"
@@ -465,7 +465,7 @@ export default function Community() {
                                 />
                                 <div className="grid grid-cols-2 gap-2">
                                   {post.images.slice(1).map((img: string, idx: number) => (
-                                    <img
+                                    <Image
                                       key={idx}
                                       src={`http://localhost:3002${img}`}
                                       alt={`post-${idx}`}
@@ -482,7 +482,7 @@ export default function Community() {
                               <div className="grid grid-cols-2 gap-2">
                                 {post.images.slice(0, 4).map((img: string, idx: number) => (
                                   <div key={idx} className="relative">
-                                    <img
+                                    <Image
                                       src={`http://localhost:3002${img}`}
                                       alt={`post-${idx}`}
                                       className="w-full h-32 object-cover rounded-xl cursor-pointer"

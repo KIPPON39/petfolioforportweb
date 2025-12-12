@@ -3,7 +3,7 @@ import { useEffect,useState } from "react";
 import { useRouter } from 'next/navigation';
 import { jwtDecode } from "jwt-decode";
 import Navbar from "../components/Navbar";
-
+import Image from "next/image";
 ////////////////////////////////////////////////////////////
 import { Line } from "react-chartjs-2";
 import {
@@ -423,7 +423,7 @@ const [isUserModalOpen, setIsUserModalOpen] = useState(false);
         {post.images.length > 0 && (
           <div className="grid grid-cols-2 gap-2 mt-2">
             {post.images.map((img, idx) => (
-              <img
+              <Image
                 key={idx}
                 src={`http://localhost:3002${img}`}
                 alt={`post-${idx}`}

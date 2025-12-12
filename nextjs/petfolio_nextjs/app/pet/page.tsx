@@ -1,43 +1,141 @@
-"use client"; // ถ้าใช้ Next.js ต้องใส่
-import { useEffect } from "react";
-import Navbar from "../components/Navbar"
-import React, { useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar";
 
 type PetType = "dog" | "cat" | "bird" | "fish" | "rabbit" | "hamster";
 
 type Pet = {
-    _id: string;
-    id: number;
-    name: string;
-    type: PetType;
-    breed: string;
-    birthdate: string;
-    weight: number | null;
-    gender: string;
-    personality: string;
-    medicalConditions: string;
-    privacy: string;
-    emoji: string;
-
+  _id: string;
+  id: number;
+  name: string;
+  type: PetType;
+  breed: string;
+  birthdate: string;
+  weight: number | null;
+  gender: string;
+  personality: string;
+  medicalConditions: string;
+  privacy: string;
+  emoji: string;
+  ownerId?: string;
 };
 
 const typeEmojis: Record<PetType, string> = {
-    dog: "🐕",
-    cat: "🐱",
-    bird: "🐦",
-    fish: "🐠",
-    rabbit: "🐰",
-    hamster: "🐹",
+  dog: "🐕",
+  cat: "🐱",
+  bird: "🐦",
+  fish: "🐠",
+  rabbit: "🐰",
+  hamster: "🐹",
+};
+
+type FormState = {
+  name: string;
+  type: PetType | "";
+  breed: string;
+  birthdate: string;
+  weight: string;
+  gender: string;
+  personality: string;
+  medicalConditions: string;
+  privacy: string;
 };
 
 export default function PetApp() {
-    const [pets, setPets] = useState<Pet[]>([]);
-    const [showModal, setShowModal] = useState(false);
-    const [showEditModal, setShowEditModal] = useState(false);
+  const [pets, setPets] = useState<Pet[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [form, setForm] = useState<FormState>({
+    name: "",
+    type: "",
+    breed: "",
+    birthdate: "",
+    weight: "",
+    gender: "",
+    personality: "",
+    medicalConditions: "",
+    privacy: "private",
+  });
 
-    const [form, setForm] = useState({
+  const [userId, setUserId] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+  const [editingPet, setEditingPet] = useState<Pet | null>(null);
+  const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+  };
+
+  // โหลด userId / token
+  useEffect(() => {
+    setUserId(localStorage.getItem("userId"));
+    setToken(localStorage.getItem("token"));
+  }, []);
+
+  // ดึง pets ของ user
+  useEffect(() => {
+    if (!userId || !token) return;
+
+    const fetchPets = async () => {
+      try {
+        const res = await fetch(`http://localhost:3002/api/pets/user/${userId}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error("Failed to fetch pets");
+
+        const data: Pet[] = await res.json();
+
+        const petsWithEmoji = data.map((pet, index) => ({
+          ...pet,
+          id: index + 1,
+          emoji: typeEmojis[pet.type] || "🐾",
+        }));
+
+        setPets(petsWithEmoji);
+      } catch (err) {
+        console.error(err);
+        setPets([]);
+      }
+    };
+
+    fetchPets();
+  }, [userId, token]);
+
+  const addPet = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!userId || !token) return alert("กรุณา login ก่อน");
+
+    const newPet = {
+      ...form,
+      type: form.type as PetType,
+      weight: form.weight ? Number(form.weight) : null,
+      ownerId: userId,
+    };
+
+    try {
+      const res = await fetch("http://localhost:3002/api/pets", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(newPet),
+      });
+      if (!res.ok) throw new Error("Failed to add pet");
+
+      const savedPet: { pet: Pet } = await res.json();
+
+      const petWithEmoji: Pet = {
+        ...savedPet.pet,
+        emoji: typeEmojis[savedPet.pet.type] || "🐾",
+      };
+
+      setPets((prev) => [...prev, petWithEmoji]);
+      setShowModal(false);
+      setForm({
         name: "",
-        type: "" as string,
+        type: "",
         breed: "",
         birthdate: "",
         weight: "",
@@ -45,210 +143,93 @@ export default function PetApp() {
         personality: "",
         medicalConditions: "",
         privacy: "private",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("ไม่สามารถเพิ่มสัตว์เลี้ยงได้ โปรดลองอีกครั้ง");
+    }
+  };
+
+  const openEditModal = (pet: Pet) => {
+    setEditingPet(pet);
+    setForm({
+      name: pet.name,
+      type: pet.type,
+      breed: pet.breed,
+      birthdate: pet.birthdate,
+      weight: pet.weight ? String(pet.weight) : "",
+      gender: pet.gender,
+      personality: pet.personality,
+      medicalConditions: pet.medicalConditions,
+      privacy: pet.privacy,
     });
+    setShowEditModal(true);
+  };
 
+  const editPet = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!editingPet) return;
 
-    const handleChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-    ) => {
-        const { name, value } = e.target;
-        setForm({ ...form, [name]: value });
+    const updatedPet = {
+      ...form,
+      type: form.type as PetType,
+      weight: form.weight ? Number(form.weight) : null,
     };
 
+    try {
+      const res = await fetch(`http://localhost:3002/api/pets/${editingPet._id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updatedPet),
+      });
+      if (!res.ok) throw new Error("Failed to update pet");
 
+      const savedPet: Pet = await res.json();
+      setPets((prev) =>
+        prev.map((p) =>
+          p._id === editingPet._id
+            ? { ...savedPet, emoji: typeEmojis[savedPet.type] || "🐾" }
+            : p
+        )
+      );
 
-//เพิ่มสัตว์
-    const addPet = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const userId = localStorage.getItem("userId");
-        if (!userId) {
-            alert("User not found. กรุณา login ก่อน");
-            return;
-        }
+      setShowEditModal(false);
+      setEditingPet(null);
+      setForm({
+        name: "",
+        type: "",
+        breed: "",
+        birthdate: "",
+        weight: "",
+        gender: "",
+        personality: "",
+        medicalConditions: "",
+        privacy: "private",
+      });
+    } catch (err) {
+      console.error(err);
+      alert("ไม่สามารถแก้ไขสัตว์เลี้ยงได้ โปรดลองอีกครั้ง");
+    }
+  };
 
-        const token = localStorage.getItem("token");
-        if (!token) {
-            alert("Token not found. กรุณา login ใหม่");
-            return;
-        }
+  const deletePet = async (petId: string) => {
+    if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบสัตว์เลี้ยงตัวนี้?")) return;
 
-        const newPet = {
-            ...form,
-            type: form.type as PetType,
-            weight: form.weight || "",
-            ownerId: userId, // ส่งไป backend
-        };
+    try {
+      const res = await fetch(`http://localhost:3002/api/pets/${petId}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("Failed to delete pet");
 
-        try {
-            const res = await fetch("http://localhost:3002/api/pets", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify(newPet),
-            });
+      setPets((prev) => prev.filter((p) => p._id !== petId));
+    } catch (err) {
+      console.error(err);
+      alert("ไม่สามารถลบสัตว์เลี้ยงได้ โปรดลองอีกครั้ง");
+    }
+  };
 
-            if (!res.ok) throw new Error("Failed to add pet");
-            const savedPet = await res.json();
-
-            // เพิ่มเฉพาะถ้า ownerId ตรงกับผู้ใช้
-            if (String(savedPet.pet.owner?._id) === String(userId)) {
-                setPets(prev => [
-                    ...prev,
-                    { ...savedPet.pet, emoji: typeEmojis[savedPet.pet.type as PetType] || "🐾" },
-                ]);
-            }
-            // กรณี backend ส่งเป็น { pet: {...} }
-            const petData = savedPet.pet ?? savedPet;
-            const petWithEmoji: Pet = {
-                ...petData,
-                emoji: typeEmojis[petData.type as PetType] || "🐾",
-            };
-            setPets(prev => [...prev, petWithEmoji]);
-            setShowModal(false);
-            setForm({
-                name: "",
-                type: "",
-                breed: "",
-                birthdate: "",
-                weight: "",
-                gender: "",
-                personality: "",
-                medicalConditions: "",
-                privacy: "private",
-            });
-        } catch (err) {
-            console.error(err);
-            alert("ไม่สามารถเพิ่มสัตว์เลี้ยงได้ โปรดลองอีกครั้ง");
-        }
-    };
-
-
-
-    const [userId, setUserId] = useState<string | null>(null);
-    const [token, setToken] = useState<string | null>(null);
-//ดึงข้อมูลล้อกอิน
-    useEffect(() => {
-        // โหลดค่าจาก localStorage หลัง mount
-        setUserId(localStorage.getItem("userId"));
-        setToken(localStorage.getItem("token"));
-    }, []);
-//ดึงข้อมูลสัตว์ตามuser
-    useEffect(() => {
-        if (!userId || !token) return;
-
-        fetch(`http://localhost:3002/api/pets/user/${userId}`, {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then(res => res.json())
-            .then(data => {
-                console.log("Pets from backend:", data);
-                if (!Array.isArray(data)) {
-                    console.error("Backend returned non-array:", data);
-                    setPets([]);
-                    return;
-                }
-                const petsWithEmoji = data.map((pet: any, index: number) => ({
-                    ...pet,
-                    id: index + 1,
-                    emoji: typeEmojis[pet.type as PetType] || "🐾",
-                }));
-                setPets(petsWithEmoji);
-            })
-            .catch(err => console.error(err));
-    }, [userId, token]); // rerun เมื่อ userId/token เปลี่ยน
-
-
-
-
-
-
-    const [editingPet, setEditingPet] = useState<Pet | null>(null);
-    const [selectedPet, setSelectedPet] = useState<Pet | null>(null);
-    const [showDetailModal, setShowDetailModal] = useState(false);
-
-    const viewPetDetails = (pet: Pet) => {
-        setSelectedPet(pet);
-        setShowDetailModal(true);
-    };
-//เปิดป้อบอัพแก้ไข
-    const openEditModal = (pet: Pet) => {
-        setEditingPet(pet);
-        setForm({
-            name: pet.name,
-            type: pet.type,
-            breed: pet.breed,
-            birthdate: pet.birthdate,
-            weight: pet.weight ? String(pet.weight) : "",
-            gender: pet.gender,
-            personality: pet.personality,
-            medicalConditions: pet.medicalConditions,
-            privacy: pet.privacy,
-        });
-        setShowEditModal(true);
-    };
-//แก้ไขสัตว์เลี้ยง
-    const editPet = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if (!editingPet) return;
-
-        const updatedPet = {
-            ...form,
-            type: form.type as PetType,
-            weight: form.weight, // keep string
-        };
-
-        try {
-            const res = await fetch(`http://localhost:3002/api/pets/${editingPet._id}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedPet),
-            });
-            if (!res.ok) throw new Error("Failed to update pet");
-
-            const savedPet = await res.json();
-            setPets(
-                pets.map((p) =>
-                    p._id === editingPet._id
-                        ? { ...savedPet, emoji: typeEmojis[savedPet.type as PetType] || "🐾" }
-                        : p
-                )
-            );
-            setShowEditModal(false);
-            setEditingPet(null);
-            setForm({
-                name: "",
-                type: "",
-                breed: "",
-                birthdate: "",
-                weight: "",
-                gender: "",
-                personality: "",
-                medicalConditions: "",
-                privacy: "private",
-            });
-        } catch (err) {
-            console.error(err);
-            alert("ไม่สามารถแก้ไขสัตว์เลี้ยงได้ โปรดลองอีกครั้ง");
-        }
-    };
-
-
-    // เพิ่มฟังก์ชันลบสัตว์เลี้ยง
-    const deletePet = async (petId: string) => {
-        if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบสัตว์เลี้ยงตัวนี้?")) return;
-
-        try {
-            const res = await fetch(`http://localhost:3002/api/pets/${petId}`, { method: "DELETE" });
-            if (!res.ok) throw new Error("Failed to delete pet");
-
-            setPets(pets.filter((p) => p._id !== petId));
-        } catch (err) {
-            console.error(err);
-            alert("ไม่สามารถลบสัตว์เลี้ยงได้ โปรดลองอีกครั้ง");
-        }
-    };
+  const viewPetDetails = (pet: Pet) => {
+    setSelectedPet(pet);
+    setShowDetailModal(true);
+  };
 
 
 

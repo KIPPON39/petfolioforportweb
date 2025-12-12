@@ -3,7 +3,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-
+import Image from "next/image";
 export default function EditPostPage() {
   const router = useRouter();
   const params = useParams();
@@ -164,8 +164,12 @@ export default function EditPostPage() {
                   <div
                     key={`existing-${idx}`}
                     className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
-                  >
-                    <img src={url} className="absolute top-0 left-0 w-full h-full object-cover" />
+                    >
+                    <Image src={url} 
+                      alt={`รูปสัตว์เลี้ยง ${idx + 1}`} 
+                      fill
+                      className="object-cover"
+                     />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(idx, "existing")}
@@ -183,7 +187,12 @@ export default function EditPostPage() {
                     key={`new-${idx}`}
                     className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
                   >
-                    <img src={url} className="absolute top-0 left-0 w-full h-full object-cover" />
+                    <Image
+                      src={url}                  // URL ของรูป
+                      alt={`รูปใหม่ ${idx + 1}`} // ใส่ alt
+                      fill                        // ทำให้เต็ม container
+                      className="object-cover"    // ใช้ object-cover เหมือนเดิม
+                    />
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(idx, "new")}

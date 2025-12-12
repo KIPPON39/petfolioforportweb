@@ -2,7 +2,7 @@
 import { useState } from "react";
 import router, { Router } from "next/router";
 import { useRouter } from "next/navigation";
-
+import Image from "next/image";
 export default function Register() {
   const [username, setUsername] = useState(""); // เพิ่ม username
   const [email, setEmail] = useState("");
@@ -52,7 +52,7 @@ export default function Register() {
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-6">
         {/* Logo */}
         <div>
-          <img
+          <Image
             src="/Logo.png"
             alt="Logo"
             className="w-20 sm:w-56 md:w-72 h-auto mb-6"
