@@ -25,14 +25,30 @@ const app = express();
 connectDB();
 
 // CORS ให้ Next.js (3001) เรียกได้
+const allowedOrigins = [
+  "http://localhost:3001",
+  "https://petfolio.wisitdev.com",
+  "https://petfolioforportweb.onrender.com",
+];
+
 app.use(
   cors({
-    origin: "https://petfolioforportweb.onrender.com", // หรือ "*" ชั่วคราว
+    origin: function (origin, callback) {
+      // รองรับ postman / server-to-server
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
   })
 );
+
 
 // สำหรับ preflight OPTIONS
 app.options("*", cors());
