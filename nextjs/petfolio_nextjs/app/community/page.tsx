@@ -41,7 +41,7 @@ export default function Community() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
-  const BASE_URL = "https://wisitdev.com/api";
+  const BASE_URL = "https://petfolioforportweb.onrender.com/api";
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
