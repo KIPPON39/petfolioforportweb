@@ -40,39 +40,49 @@ export default function Community() {
   const [newImages, setNewImages] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
+  const [loadingAuth, setLoadingAuth] = useState(true);
+
 
   const BASE_URL = "https://petfolioforportweb.onrender.com";
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUserId = localStorage.getItem("userId");
-    setToken(storedToken);
-    if (storedUserId) setCurrentUser({ _id: storedUserId });
-  }, []);
+ useEffect(() => {
+  const storedToken = localStorage.getItem("token");
+  const storedUserId = localStorage.getItem("userId");
 
-  useEffect(() => {
-    if (!token) {
-      router.push("/");
+  if (storedToken) setToken(storedToken);
+  if (storedUserId) setCurrentUser({ _id: storedUserId });
+
+  setLoadingAuth(false); 
+}, []);
+
+
+useEffect(() => {
+  if (loadingAuth) return; 
+
+  if (!token) {
+    router.push("/login");
+    return;
+  }
+
+  try {
+    const decoded = jwtDecode<TokenPayload>(token);
+
+    if (decoded.exp * 1000 < Date.now()) {
+      localStorage.removeItem("token");
+      router.push("/login");
       return;
     }
 
-    try {
-      const decoded = jwtDecode<TokenPayload>(token);
-
-      if (decoded.status !== "active") {
-        router.push("/banpage");
-        return;
-      }
-
-      if (decoded.exp * 1000 < Date.now()) {
-        localStorage.removeItem("token");
-        router.push("/");
-      }
-    } catch (err) {
-      console.error("Invalid token", err);
-      router.push("/login");
+    if (decoded.status !== "active") {
+      router.push("/banpage");
+      return;
     }
-  }, [router, token]);
+  } catch (err) {
+    console.error("Invalid token", err);
+    router.push("/login");
+  }
+}, [token, loadingAuth, router]);
+
 
   useEffect(() => {
     if (!token || !currentUser) return;
