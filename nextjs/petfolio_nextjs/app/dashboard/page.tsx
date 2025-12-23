@@ -129,7 +129,7 @@ export default function First_page() {
     if (!userIdLocal) return;
 
     try {
-      const res = await fetch(`http://127.0.0.1:3002/api/pets/petcount/${userIdLocal}`);
+      const res = await fetch(`https://petfolioforportweb.onrender.com/api/pets/petcount/${userIdLocal}`);
       if (!res.ok) throw new Error("Fail to fetch pet count");
 
       const result: { type: PetType; count: number }[] = await res.json();
