@@ -17,7 +17,7 @@ export default function Register() {
     }
 
     try {
-      const res = await fetch("https://petfolio.wisitdev.com/api/auth/register", {
+      const res = await fetch("https://api.petfolio.wisitdev.com/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, email, password }),

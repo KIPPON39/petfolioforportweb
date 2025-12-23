@@ -128,7 +128,7 @@ export default function Admin() {
         useEffect(() => {
             const fetchAllUser = async () => {
               try {
-                const response = await fetch('https://petfolio.wisitdev.com/users/all_user');
+                const response = await fetch('https://api.petfolio.wisitdev.com/users/all_user');
                 if (!response.ok) {
                   throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -172,7 +172,7 @@ export default function Admin() {
         useEffect(() => {
             const fetchAllPet = async () => {
               try {
-                const response = await fetch('https://petfolio.wisitdev.com/api/pets');
+                const response = await fetch('https://api.petfolio.wisitdev.com/api/pets');
                 if (!response.ok) {
                   throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -216,7 +216,7 @@ export default function Admin() {
             const [selectedPet, setSelectedPet] = useState<string | null>(null);
             //ดึงpostในcommu
             useEffect(() => {
-              fetch("https://petfolio.wisitdev.com/api/community-posts")
+              fetch("https://api.petfolio.wisitdev.com/api/community-posts")
                 .then(res => res.json())
                 .then((data: CommunityPost[]) => setPosts(data));
             }, []);
@@ -241,7 +241,7 @@ export default function Admin() {
               if (!confirmed) return;
 
               try {
-                const res = await fetch(`https://petfolio.wisitdev.com/api/community-posts/${postId}`, {
+                const res = await fetch(`https://api.petfolio.wisitdev.com/api/community-posts/${postId}`, {
                   method: "DELETE"
                 });
                 if (res.ok) {
@@ -274,7 +274,7 @@ export default function Admin() {
                 if (!window.confirm(confirmMsg)) return;
 
                 try {
-                  const res = await fetch(`https://petfolio.wisitdev.com/users/ban/${userId}`, {
+                  const res = await fetch(`https://api.petfolio.wisitdev.com/users/ban/${userId}`, {
                     method: "PUT",
                   });
 
@@ -425,7 +425,7 @@ export default function Admin() {
             {post.images.map((img, idx) => (
               <Image
                 key={idx}
-                src={`https://petfolio.wisitdev.com${img}`}
+                src={`https://api.petfolio.wisitdev.com${img}`}
                 alt={`post-${idx}`}
                 className="w-full h-32 object-cover rounded-xl"
               />

@@ -39,7 +39,7 @@ export default function EditPostPage() {
     if (!token || !postId) return;
 
     // ดึงข้อมูลโพสต์
-    fetch(`https://petfolio.wisitdev.com/api/community-posts/communityposts/${postId}`, {
+    fetch(`https://api.petfolio.wisitdev.com/api/community-posts/communityposts/${postId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
@@ -55,7 +55,7 @@ export default function EditPostPage() {
     // ดึงสัตว์เลี้ยงผู้ใช้
     const userId = localStorage.getItem("userId");
     if (!userId) return;
-    fetch(`https://petfolio.wisitdev.com/api/pets/user/${userId}`, {
+    fetch(`https://api.petfolio.wisitdev.com/api/pets/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then(res => res.json())
@@ -94,7 +94,7 @@ export default function EditPostPage() {
 
     try {
       const res = await fetch(
-        `https://petfolio.wisitdev.com/api/community-posts/updatePost/${postId}`,
+        `https://api.petfolio.wisitdev.com/api/community-posts/updatePost/${postId}`,
         {
           method: "POST",
           headers: { Authorization: `Bearer ${token}` },
@@ -170,7 +170,7 @@ export default function EditPostPage() {
                   className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
                 >
                   <Image
-                    src={`https://petfolio.wisitdev.com${img}`}
+                    src={`https://api.petfolio.wisitdev.com${img}`}
                     alt={`รูปสัตว์เลี้ยง ${idx + 1}`}
                     fill
                     className="object-cover"

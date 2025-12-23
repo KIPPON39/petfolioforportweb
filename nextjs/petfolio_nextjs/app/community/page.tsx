@@ -147,7 +147,7 @@ export default function Community() {
     newImages.forEach((file) => formData.append("images", file));
 
     try {
-      const res = await fetch("https://petfolio.wisitdev.com/api/community-posts", {
+      const res = await fetch("https://api.petfolio.wisitdev.com/api/community-posts", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -176,7 +176,7 @@ export default function Community() {
     if (!confirm("คุณแน่ใจว่าต้องการลบโพสต์นี้?")) return;
 
     try {
-      const res = await fetch(`https://petfolio.wisitdev.com/api/community-posts/${postId}`, {
+      const res = await fetch(`https://api.petfolio.wisitdev.com/api/community-posts/${postId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -312,10 +312,10 @@ export default function Community() {
                           {post.images.slice(0, 4).map((img, idx) => (
                             <div key={idx} className="relative">
                               <Image
-                                src={`https://petfolio.wisitdev.com${img}`}
+                                src={`https://api.petfolio.wisitdev.com${img}`}
                                 alt={`post-${idx}`}
                                 className="w-full h-48 object-cover rounded-xl cursor-pointer"
-                                onClick={() => setOpenImage(`https://petfolio.wisitdev.com${img}`)}
+                                onClick={() => setOpenImage(`https://api.petfolio.wisitdev.com${img}`)}
                               />
                               {idx === 3 && post.images.length > 4 && (
                                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-xl text-white text-2xl font-semibold">
@@ -374,10 +374,10 @@ export default function Community() {
                           {post.images.slice(0, 4).map((img, idx) => (
                             <div key={idx} className="relative">
                               <Image
-                                src={`https://petfolio.wisitdev.com${img}`}
+                                src={`https://api.petfolio.wisitdev.com${img}`}
                                 alt={`post-${idx}`}
                                 className="w-full h-32 object-cover rounded-xl cursor-pointer"
-                                onClick={() => setOpenImage(`https://petfolio.wisitdev.com${img}`)}
+                                onClick={() => setOpenImage(`https://api.petfolio.wisitdev.com${img}`)}
                               />
                               {idx === 3 && post.images.length > 4 && (
                                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-xl text-white text-2xl font-semibold">
