@@ -41,7 +41,7 @@ export default function Community() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
-  const BASE_URL = "https://petfolioforportweb.onrender.com/api";
+  const BASE_URL = "https://petfolioforportweb.onrender.com";
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
@@ -88,7 +88,7 @@ export default function Community() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("${BASE_URL}/api/community-posts", {
+    fetch(`${BASE_URL}/api/community-posts`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
