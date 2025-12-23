@@ -10,7 +10,7 @@ export default function Login() {
    const router = useRouter();
 
   const handleLogin = async () => {
-    const res = await fetch("https://api.petfolio.wisitdev.com/api/auth/login", {
+    const res = await fetch("https://petfolioforportweb.onrender.com/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

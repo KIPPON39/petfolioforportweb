@@ -27,7 +27,7 @@ connectDB();
 // CORS ให้ Next.js (3001) เรียกได้
 app.use(
   cors({
-    origin: "https://api.petfolio.wisitdev.com", // หรือ "*" ชั่วคราว
+    origin: "https://petfolioforportweb.onrender.com", // หรือ "*" ชั่วคราว
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,

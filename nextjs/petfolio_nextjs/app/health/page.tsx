@@ -31,7 +31,7 @@ type HealthRecord = {
     cost: number;
 };
 
-const BASE_URL = "https://api.petfolio.wisitdev.com/api";
+const BASE_URL = "https://petfolioforportweb.onrender.com/api";
 
 const typeEmoji: Record<string, string> = {
     dog: "🐕",

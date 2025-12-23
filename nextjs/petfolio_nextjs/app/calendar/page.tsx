@@ -49,7 +49,7 @@ export default function Calendar() {
 
         // ดึงข้อมูลสัตว์เลี้ยง
         const petsResponse = await fetch(
-          `https://api.petfolio.wisitdev.com/api/pets/user/${currentUserId}`,
+          `https://petfolioforportweb.onrender.com/api/pets/user/${currentUserId}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
 
@@ -63,7 +63,7 @@ export default function Calendar() {
 
         // ดึงข้อมูลกิจกรรม
         const eventsResponse = await fetch(
-          `https://api.petfolio.wisitdev.com/api/reminders/user/${currentUserId}`
+          `https://petfolioforportweb.onrender.com/api/reminders/user/${currentUserId}`
         );
         if (!eventsResponse.ok) throw new Error("Failed to fetch events");
 
@@ -123,7 +123,7 @@ export default function Calendar() {
     };
 
     try {
-      const response = await fetch("https://api.petfolio.wisitdev.com/api/reminders", {
+      const response = await fetch("https://petfolioforportweb.onrender.com/api/reminders", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newReminder),
@@ -142,7 +142,7 @@ export default function Calendar() {
     if (!window.confirm("คุณแน่ใจหรือไม่ว่าต้องการลบการแจ้งเตือนนี้?")) return;
 
     try {
-      const response = await fetch(`https://api.petfolio.wisitdev.com/api/reminders/${reminderId}`, {
+      const response = await fetch(`https://petfolioforportweb.onrender.com/api/reminders/${reminderId}`, {
         method: "DELETE",
       });
       if (!response.ok) throw new Error("Failed to delete reminder");

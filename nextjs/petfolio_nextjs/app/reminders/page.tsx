@@ -76,7 +76,7 @@ export default function Reminder() {
       const token = localStorage.getItem("token");
       try {
         // Fetch Pets
-        const petsRes = await fetch(`https://api.petfolio.wisitdev.com/api/pets/user/${userId}`, {
+        const petsRes = await fetch(`https://petfolioforportweb.onrender.com/api/pets/user/${userId}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         const petsData: Pet[] = petsRes.ok ? await petsRes.json() : [];
@@ -84,7 +84,7 @@ export default function Reminder() {
         setPets(formattedPets);
 
         // Fetch Reminders
-        const remRes = await fetch(`https://api.petfolio.wisitdev.com/api/reminders/user/${userId}`, {
+        const remRes = await fetch(`https://petfolioforportweb.onrender.com/api/reminders/user/${userId}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         if (!remRes.ok) throw new Error("Failed to fetch reminders");
@@ -172,7 +172,7 @@ export default function Reminder() {
 
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch("https://api.petfolio.wisitdev.com/api/reminders", {
+      const response = await fetch("https://petfolioforportweb.onrender.com/api/reminders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -220,7 +220,7 @@ export default function Reminder() {
     if (!userId) return;
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`https://api.petfolio.wisitdev.com/api/reminders/${id}/complete`, {
+      const res = await fetch(`https://petfolioforportweb.onrender.com/api/reminders/${id}/complete`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

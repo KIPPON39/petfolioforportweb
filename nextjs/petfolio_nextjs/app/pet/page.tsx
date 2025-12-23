@@ -82,7 +82,7 @@ export default function PetApp() {
 
     const fetchPets = async () => {
       try {
-        const res = await fetch(`https://api.petfolio.wisitdev.com/api/pets/user/${userId}`, {
+        const res = await fetch(`https://petfolioforportweb.onrender.com/api/pets/user/${userId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error("Failed to fetch pets");
@@ -117,7 +117,7 @@ export default function PetApp() {
     };
 
     try {
-      const res = await fetch("https://api.petfolio.wisitdev.com/api/pets", {
+      const res = await fetch("https://petfolioforportweb.onrender.com/api/pets", {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify(newPet),
@@ -177,7 +177,7 @@ export default function PetApp() {
     };
 
     try {
-      const res = await fetch(`https://api.petfolio.wisitdev.com/api/pets/${editingPet._id}`, {
+      const res = await fetch(`https://petfolioforportweb.onrender.com/api/pets/${editingPet._id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updatedPet),
@@ -216,7 +216,7 @@ export default function PetApp() {
     if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบสัตว์เลี้ยงตัวนี้?")) return;
 
     try {
-      const res = await fetch(`https://api.petfolio.wisitdev.com/api/pets/${petId}`, { method: "DELETE" });
+      const res = await fetch(`https://petfolioforportweb.onrender.com/api/pets/${petId}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete pet");
 
       setPets((prev) => prev.filter((p) => p._id !== petId));

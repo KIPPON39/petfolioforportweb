@@ -16,7 +16,7 @@ useEffect(() => {
     if (!userId || !token) return;
 
     try {
-      const res = await fetch(`https://api.petfolio.wisitdev.com/api/reminders/user/${userId}`, {
+      const res = await fetch(`https://petfolioforportweb.onrender.com/api/reminders/user/${userId}`, {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
@@ -49,7 +49,7 @@ useEffect(() => {
       if (!userId || !token) return;
 
       try {
-        const res = await fetch(`https://api.petfolio.wisitdev.com/api/reminders/user/${userId}`, {
+        const res = await fetch(`https://petfolioforportweb.onrender.com/api/reminders/user/${userId}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
