@@ -149,7 +149,7 @@ export default function First_page() {
     if (!userIdLocal) return;
 
     try {
-      const res = await fetch(`http://localhost:3002/api/reminders/user/${userIdLocal}`, {
+      const res = await fetch(`https://petfolio.wisitdev.com/api/reminders/user/${userIdLocal}`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       if (!res.ok) throw new Error("Failed to fetch reminders");

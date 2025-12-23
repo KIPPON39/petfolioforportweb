@@ -9,7 +9,7 @@ export default function Login() {
    const router = useRouter();
 //เข้าสู่ระบบ
   const handleLogin = async () => {
-    const res = await fetch("http://localhost:3002/api/auth/login", {
+    const res = await fetch("https://petfolio.wisitdev.com/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),

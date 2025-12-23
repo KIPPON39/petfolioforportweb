@@ -41,6 +41,8 @@ export default function Community() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const router = useRouter();
 
+  const BASE_URL = "https://wisitdev.com/api";
+
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
     const storedUserId = localStorage.getItem("userId");
@@ -75,7 +77,7 @@ export default function Community() {
   useEffect(() => {
     if (!token || !currentUser) return;
 
-    fetch(`http://localhost:3002/api/pets/user/${currentUser._id}`, {
+    fetch(`${BASE_URL}/api/pets/user/${currentUser._id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -86,7 +88,7 @@ export default function Community() {
   useEffect(() => {
     if (!token) return;
 
-    fetch("http://localhost:3002/api/community-posts", {
+    fetch("${BASE_URL}/api/community-posts", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -97,7 +99,7 @@ export default function Community() {
   useEffect(() => {
     if (!token || !currentUser) return;
 
-    fetch(`http://localhost:3002/api/community-posts/user/${currentUser._id}`, {
+    fetch(`${BASE_URL}/api/community-posts/user/${currentUser._id}`, {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => res.json())
@@ -145,7 +147,7 @@ export default function Community() {
     newImages.forEach((file) => formData.append("images", file));
 
     try {
-      const res = await fetch("http://localhost:3002/api/community-posts", {
+      const res = await fetch("https://petfolio.wisitdev.com/api/community-posts", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },
         body: formData,
@@ -174,7 +176,7 @@ export default function Community() {
     if (!confirm("คุณแน่ใจว่าต้องการลบโพสต์นี้?")) return;
 
     try {
-      const res = await fetch(`http://localhost:3002/api/community-posts/${postId}`, {
+      const res = await fetch(`https://petfolio.wisitdev.com/api/community-posts/${postId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -310,10 +312,10 @@ export default function Community() {
                           {post.images.slice(0, 4).map((img, idx) => (
                             <div key={idx} className="relative">
                               <Image
-                                src={`http://localhost:3002${img}`}
+                                src={`https://petfolio.wisitdev.com${img}`}
                                 alt={`post-${idx}`}
                                 className="w-full h-48 object-cover rounded-xl cursor-pointer"
-                                onClick={() => setOpenImage(`http://localhost:3002${img}`)}
+                                onClick={() => setOpenImage(`https://petfolio.wisitdev.com${img}`)}
                               />
                               {idx === 3 && post.images.length > 4 && (
                                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-xl text-white text-2xl font-semibold">
@@ -372,10 +374,10 @@ export default function Community() {
                           {post.images.slice(0, 4).map((img, idx) => (
                             <div key={idx} className="relative">
                               <Image
-                                src={`http://localhost:3002${img}`}
+                                src={`https://petfolio.wisitdev.com${img}`}
                                 alt={`post-${idx}`}
                                 className="w-full h-32 object-cover rounded-xl cursor-pointer"
-                                onClick={() => setOpenImage(`http://localhost:3002${img}`)}
+                                onClick={() => setOpenImage(`https://petfolio.wisitdev.com${img}`)}
                               />
                               {idx === 3 && post.images.length > 4 && (
                                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-xl text-white text-2xl font-semibold">

@@ -21,7 +21,7 @@ export const addPetService = async (
     ownerId: userId,
   };
 
-  const res = await fetch("http://localhost:3002/api/pets", {
+  const res = await fetch("https://petfolio.wisitdev.com/api/pets", {
     method: "POST",
     headers: { 
       "Content-Type": "application/json",
