@@ -425,8 +425,7 @@ export default function Admin() {
             {post.images.map((img, idx) => (
               <Image
                 key={idx}
-                src={`https://petfolioforportweb.onrender.com${img}`}
-                alt={`post-${idx}`}
+                src={img}                alt={`post-${idx}`}
                 className="w-full h-32 object-cover rounded-xl"
               />
             ))}

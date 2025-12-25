@@ -323,8 +323,7 @@ export default function Community() {
                           {post.images.slice(0, 4).map((img, idx) => (
                             <div key={idx} className="relative">
                               <Image
-                                src={`https://petfolioforportweb.onrender.com${img}`}
-                                alt={`post-${idx}`}
+                                src={img}                                alt={`post-${idx}`}
                                 className="w-full h-48 object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
                                 onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
                               />
@@ -371,8 +370,7 @@ export default function Community() {
                             {post.images.slice(0, 4).map((img, idx) => (
                               <div key={idx} className="relative">
                                 <Image
-                                  src={`https://petfolioforportweb.onrender.com${img}`}
-                                  alt={`post-${idx}`}
+                                  src={img}                                  alt={`post-${idx}`}
                                   className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
                                   onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
                                 />
@@ -445,8 +443,7 @@ export default function Community() {
                         {post.images.slice(0, 4).map((img, idx) => (
                           <div key={idx} className="relative">
                             <Image
-                              src={`https://petfolioforportweb.onrender.com${img}`}
-                              alt={`post-${idx}`}
+                              src={img}                              alt={`post-${idx}`}
                               className="w-full h-40 object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
                               onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
                             />
@@ -505,8 +502,7 @@ export default function Community() {
                         {post.images.slice(0, 4).map((img, idx) => (
                           <div key={idx} className="relative">
                             <Image
-                              src={`https://petfolioforportweb.onrender.com${img}`}
-                              alt={`post-${idx}`}
+                              src={img}                              alt={`post-${idx}`}
                               className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
                               onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
                             />
@@ -582,8 +578,7 @@ export default function Community() {
                           {post.images.slice(0, 4).map((img, idx) => (
                             <Image
                               key={idx}
-                              src={`https://petfolioforportweb.onrender.com${img}`}
-                              alt={`post-${idx}`}
+                              src={img}                              alt={`post-${idx}`}
                               className="w-full h-20 object-cover rounded-lg cursor-pointer"
                               onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
                             />

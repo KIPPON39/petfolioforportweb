@@ -170,8 +170,7 @@ export default function EditPostPage() {
                   className="relative w-full pb-[100%] rounded-md overflow-hidden border border-gray-200 shadow-sm"
                 >
                   <Image
-                    src={`https://petfolioforportweb.onrender.com${img}`}
-                    alt={`รูปสัตว์เลี้ยง ${idx + 1}`}
+                    src={img}                    alt={`รูปสัตว์เลี้ยง ${idx + 1}`}
                     fill
                     className="object-cover"
                   />

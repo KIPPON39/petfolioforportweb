@@ -1,3 +1,6 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 const connectDB = require("./db");
 const port = process.env.PORT || 3002;
 
@@ -17,6 +20,7 @@ const healthRoutes = require("./routes/health");
 const remindersRouter = require('./routes/reminder');
 
 const communityPostRoutes = require("./routes/community");
+
 
 
 const app = express();
@@ -71,7 +75,7 @@ app.use('/api/reminders', remindersRouter);
 
 
 
-app.use("/uploads", express.static("uploads")); // ให้เข้าถึงรูป
+// app.use("/uploads", express.static("uploads")); // ให้เข้าถึงรูป
 app.use("/api/community-posts", communityPostRoutes);
 
 
