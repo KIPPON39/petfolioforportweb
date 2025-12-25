@@ -85,6 +85,14 @@ export default function Login() {
        ลงทะเบียน
       </span>
     </p>
+    <p className="text-sm text-gray-500 mt-4 text-center">
+      <span>
+       Id ทดสอบ Email : TestID@example.com
+      </span>
+      <p><span>
+       Password : 123456789
+      </span></p>
+    </p>
         </div>
       </div>
 </div>
