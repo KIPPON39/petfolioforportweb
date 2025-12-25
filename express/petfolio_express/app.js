@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+require("dotenv").config();
 
 const connectDB = require("./db");
 const port = process.env.PORT || 3002;
