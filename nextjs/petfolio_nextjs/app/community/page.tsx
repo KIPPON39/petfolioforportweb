@@ -556,18 +556,18 @@ export default function Community() {
       )}
 
       {/* Image Lightbox */}
-      {openImage && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
-          onClick={() => setOpenImage(null)}
-        >
-          <Image
-            src={openImage}
-            alt="fullscreen"
-            className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg object-contain"
-          />
-        </div>
-      )}
+        {openImage && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+            onClick={() => setOpenImage(null)}
+          >
+            <Image
+              src={openImage} 
+              alt="fullscreen"
+              className="max-h-[90vh] max-w-[90vw] rounded-lg shadow-lg object-contain"
+            />
+          </div>
+        )}
     </div>
   );
 }
