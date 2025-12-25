@@ -555,23 +555,23 @@ export default function Community() {
         </div>
       )}
 
-      {/* Image Lightbox */}
-        {openImage && (
-          <div
-            className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
-            onClick={() => setOpenImage(null)}
-          >
-            <div className="relative w-full max-w-[90vw] max-h-[90vh]">
-              <Image
-                src={openImage} 
-                alt="fullscreen"
-                fill 
-                style={{ objectFit: "contain" }}
-                className="rounded-lg shadow-lg"
-              />
-            </div>
+      {openImage && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 p-4"
+          onClick={() => setOpenImage(null)}
+        >
+          <div className="relative w-[90vw] h-[90vh]">
+            <Image
+              src={openImage} 
+              alt="fullscreen"
+              fill 
+              style={{ objectFit: "contain" }}
+              className="rounded-lg shadow-lg"
+            />
           </div>
-        )}
+        </div>
+      )}
+
     </div>
   );
 }
