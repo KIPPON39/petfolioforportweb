@@ -256,7 +256,7 @@ export default function Community() {
                               <Image
                                 src={img}                                alt={`post-${idx}`}
                                 className="w-full h-48 object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
-                                onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
+                                onClick={() => setOpenImage(img)}
                               />
                               {idx === 3 && post.images.length > 4 && (
                                 <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-xl text-white text-2xl font-semibold">
@@ -303,7 +303,7 @@ export default function Community() {
                                 <Image
                                   src={img}                                  alt={`post-${idx}`}
                                   className="w-full h-24 object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
-                                  onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
+                                  onClick={() => setOpenImage(img)}
                                 />
                                 {idx === 3 && post.images.length > 4 && (
                                   <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg text-white text-lg font-semibold">
@@ -376,7 +376,7 @@ export default function Community() {
                             <Image
                               src={img}                              alt={`post-${idx}`}
                               className="w-full h-40 object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
-                              onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
+                              onClick={() => setOpenImage(img)}
                             />
                             {idx === 3 && post.images.length > 4 && (
                               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-xl text-white text-xl font-semibold">
@@ -435,7 +435,7 @@ export default function Community() {
                             <Image
                               src={img}                              alt={`post-${idx}`}
                               className="w-full h-32 object-cover rounded-lg cursor-pointer hover:opacity-90 transition"
-                              onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
+                              onClick={() => setOpenImage(img)}
                             />
                             {idx === 3 && post.images.length > 4 && (
                               <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-lg text-white font-semibold text-sm">
@@ -522,7 +522,7 @@ export default function Community() {
                               key={idx}
                               src={img}                              alt={`post-${idx}`}
                               className="w-full h-20 object-cover rounded-lg cursor-pointer"
-                              onClick={() => setOpenImage(`https://petfolioforportweb.onrender.com${img}`)}
+                              onClick={() => setOpenImage(img)}
                             />
                           ))}
                         </div>
